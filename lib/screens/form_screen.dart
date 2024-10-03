@@ -23,7 +23,7 @@ class FormScreen extends StatelessWidget {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'ชื่อรายการ',
+                    labelText: 'ชื่อน้ำปั่น',
                   ),
                   autofocus: true,
                   controller: titleController,
@@ -41,12 +41,12 @@ class FormScreen extends StatelessWidget {
                   controller: amountController,
                   validator: (String? input) {
                     try {
-                      double amount = double.parse(input!);
-                      if (amount < 0) {
-                        return 'กรุณากรอกข้อมูลมากกว่า 0';
+                      String amount = (input!);
+                      if (amount == int ) {
+                        return 'กรุณากรอกข้อมูลมากกว่า 0 คำ';
                       }
                     } catch (e) {
-                      return 'กรุณากรอกข้อมูลเป็นตัวเลข';
+                      return 'กรุณากรอกข้อมูลเป็นข้อความ';
                     }
                   },
                 ),
@@ -58,7 +58,7 @@ class FormScreen extends StatelessWidget {
                               // create transaction data object
                               var statement = Transactions(
                                   title: titleController.text,
-                                  amount: double.parse(amountController.text),
+                                  amount: (amountController.text),
                                   date: DateTime.now()
                                   );
                             
