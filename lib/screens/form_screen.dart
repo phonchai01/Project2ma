@@ -40,7 +40,7 @@ class FormScreen extends StatelessWidget {
             ),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'ส่วนผสม',
+                labelText: 'ส่วนผสมสุดแปลกในน้ำปั่น',
               ),
               controller: mixController,
               validator: (String? str) {
