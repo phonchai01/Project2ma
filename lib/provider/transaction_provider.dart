@@ -9,14 +9,14 @@ class TransactionProvider with ChangeNotifier {
     return transactions;
   }
 
-  void addTransaction(Transactions transaction) async{
+  void addTransaction(Transactions transaction) async {
     var db = await TransactionDB(dbName: 'transactions.db').openDatabase();
-    transactions.insert(0,transaction);
+    transactions.insert(0, transaction);
     notifyListeners();
   }
 
   void deleteTransaction(int index) {
     transactions.removeAt(index);
-    notifyListeners(); 
+    notifyListeners();
   }
 }

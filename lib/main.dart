@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:simple_app/screens/form_screen.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_app/provider/transaction_provider.dart';
 
@@ -11,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -42,68 +40,65 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Text(widget.title),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return FormScreen();
-                }));
-              },
-            ),
-          ],
-        ),
-        body: Consumer(
-          builder: (context, TransactionProvider provider, Widget? child) {
-            if (provider.transactions.isEmpty) {
-              return const Center(
-                child: Text('ไม่มีรายการ'),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: provider.transactions.length,
-                itemBuilder: (context, index) {
-                  var statement = provider.transactions[index];
-                  return Card(
-                    elevation: 5,
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    child: ListTile(
-                      title: Text(statement.title),
-                      subtitle:
-                          Text(DateFormat('dd MMM yyyy hh:mm:ss').format(statement.date)),
-                      leading: CircleAvatar(
-                        radius: 30,
-                        child: FittedBox(
-                          child: Text('${statement.amount}'),
-                        ),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {},
-                      ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return FormScreen();
+              }));
+            },
+          ),
+        ],
+      ),
+      body: Consumer<TransactionProvider>(
+        builder: (context, provider, child) {
+          if (provider.transactions.isEmpty) {
+            return const Center(
+              child: Text('ไม่มีรายการ'),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: provider.transactions.length,
+              itemBuilder: (context, index) {
+                var statement = provider.transactions[index];
+                return Card(
+                  elevation: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  child: ListTile(
+                    title: Text(
+                      statement.title,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
-              );
-            }
-          },
-        )
-        // This trailing comma makes auto-formatting nicer for build methods.
-        );
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('ส่วนผสม: ${statement.mix}', style: const TextStyle(fontSize: 12)),
+                        Text('ความหวาน: ${statement.lvSweet}', style: const TextStyle(fontSize: 12)),
+                        Text('จำนวนเงิน: ${statement.amount} บาท', style: const TextStyle(fontSize: 12)),
+                        Text('ความอร่อย: ${statement.lvTasty}', style: const TextStyle(fontSize: 12)),
+                        Text('ข้อเสนอแนะ: ${statement.suggest}', style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic)),
+                      ],
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        provider.deleteTransaction(index);
+                      },
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
   }
 }
