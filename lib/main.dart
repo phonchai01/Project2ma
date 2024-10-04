@@ -69,11 +69,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('ส่วนผสม: ${statement.mix}', style: const TextStyle(fontSize: 12)),
-                        Text('ความหวาน: ${statement.lvSweet}', style: const TextStyle(fontSize: 12)),
-                        Text('จำนวนเงิน: ${statement.amount} บาท', style: const TextStyle(fontSize: 12)),
-                        Text('ความอร่อย: ${statement.lvTasty}', style: const TextStyle(fontSize: 12)),
-                        Text('ข้อเสนอแนะ: ${statement.suggest}', style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic)),
+                        Text('ส่วนผสม: ${statement.mix}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
+                        Text('ความหวาน: ${statement.lvSweet}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
+                        Text('จำนวนเงิน: ${statement.amount} บาท', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
+                        Text('ความอร่อย: ${statement.lvTasty}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
+                        Text('ข้อเสนอแนะ: ${statement.suggest}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.brown)),
                       ],
                     ),
                     trailing: IconButton(
