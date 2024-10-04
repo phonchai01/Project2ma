@@ -9,6 +9,10 @@ class FormScreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final amountController = TextEditingController();
+  final lvSweetController = TextEditingController();
+  final mixController = TextEditingController();
+  final lvTastyController = TextEditingController();
+  final suggestController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +39,28 @@ class FormScreen extends StatelessWidget {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
+                    labelText: 'ส่วนผสม',
+                  ),
+                  controller: mixController,
+                  validator: (String? str) {
+                    if (str!.isEmpty) {
+                      return 'กรุณากรอกข้อมูล';
+                    }
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'ระดับความหวาน',
+                  ),
+                  controller: lvSweetController,
+                  validator: (String? str) {
+                    if (str!.isEmpty) {
+                      return 'กรุณากรอกข้อมูล';
+                    }
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
                     labelText: 'จำนวนเงิน',
                   ),
                   keyboardType: TextInputType.number,
@@ -50,6 +76,28 @@ class FormScreen extends StatelessWidget {
                     }
                   },
                 ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'ระดับความอร่อย',
+                  ),
+                  controller: lvTastyController,
+                  validator: (String? str) {
+                    if (str!.isEmpty) {
+                      return 'กรุณากรอกข้อมูล';
+                    }
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'ข้อเสนอแนะ',
+                  ),
+                  controller: suggestController,
+                  validator: (String? str) {
+                    if (str!.isEmpty) {
+                      return 'กรุณากรอกข้อมูล';
+                    }
+                  },
+                ),
                 TextButton(
                     child: const Text('บันทึก'),
                     onPressed: () {
@@ -59,6 +107,10 @@ class FormScreen extends StatelessWidget {
                               var statement = Transactions(
                                   title: titleController.text,
                                   amount: (amountController.text),
+                                  mix: (mixController.text),
+                                  lvSweet: (lvSweetController.text),
+                                  lvTasty: (lvTastyController.text),
+                                  suggest: (suggestController.text),
                                   date: DateTime.now()
                                   );
                             
