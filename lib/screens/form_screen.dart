@@ -11,7 +11,7 @@ class FormScreen extends StatelessWidget {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   final mixController = TextEditingController();
-  final suggestController = TextEditingController(); // เพิ่มตัวแปรนี้
+  final suggestController = TextEditingController();
   String? selectedSweetness;
   String? selectedTastyLevel;
 
@@ -37,6 +37,7 @@ class FormScreen extends StatelessWidget {
                 }
                 return null;
               },
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -49,6 +50,7 @@ class FormScreen extends StatelessWidget {
                 }
                 return null;
               },
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(
@@ -56,11 +58,11 @@ class FormScreen extends StatelessWidget {
               ),
               value: selectedSweetness,
               items: const [
-                DropdownMenuItem(value: 'ไม่หวาน', child: Text('ไม่หวาน')),
-                DropdownMenuItem(value: 'หวานน้อย', child: Text('หวานน้อย')),
-                DropdownMenuItem(value: 'หวานปกติ', child: Text('หวานปกติ')),
-                DropdownMenuItem(value: 'หวานปานกลาง', child: Text('หวานปานกลาง')),
-                DropdownMenuItem(value: 'หวานมาก', child: Text('หวานมาก')),
+                DropdownMenuItem(value: 'ไม่หวาน', child: Text('ไม่หวาน', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'หวานน้อย', child: Text('หวานน้อย', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'หวานปกติ', child: Text('หวานปกติ', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'หวานปานกลาง', child: Text('หวานปานกลาง', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'หวานมาก', child: Text('หวานมาก', style: TextStyle(color: Colors.black))),
               ],
               onChanged: (value) {
                 selectedSweetness = value;
@@ -71,6 +73,7 @@ class FormScreen extends StatelessWidget {
                 }
                 return null;
               },
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             TextFormField(
               decoration: const InputDecoration(
@@ -88,6 +91,7 @@ class FormScreen extends StatelessWidget {
                 }
                 return null;
               },
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(
@@ -95,11 +99,11 @@ class FormScreen extends StatelessWidget {
               ),
               value: selectedTastyLevel,
               items: const [
-                DropdownMenuItem(value: 'แย่มาก', child: Text('แย่มาก')),
-                DropdownMenuItem(value: 'ไม่อร่อย', child: Text('ไม่อร่อย')),
-                DropdownMenuItem(value: 'ปานกลาง', child: Text('ปานกลาง')),
-                DropdownMenuItem(value: 'อร่อย', child: Text('อร่อย')),
-                DropdownMenuItem(value: 'อร่อยมาก', child: Text('อร่อยมาก')),
+                DropdownMenuItem(value: 'แย่มาก', child: Text('แย่มาก', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'ไม่อร่อย', child: Text('ไม่อร่อย', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'ปานกลาง', child: Text('ปานกลาง', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'อร่อย', child: Text('อร่อย', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'อร่อยมาก', child: Text('อร่อยมาก', style: TextStyle(color: Colors.black))),
               ],
               onChanged: (value) {
                 selectedTastyLevel = value;
@@ -110,37 +114,49 @@ class FormScreen extends StatelessWidget {
                 }
                 return null;
               },
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             TextFormField(
               decoration: const InputDecoration(
                 labelText: 'ข้อเสนอแนะ',
               ),
-              controller: suggestController, // เพิ่ม TextFormField สำหรับข้อเสนอแนะ
+              controller: suggestController,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextButton(
-              child: const Text('บันทึก'),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  var uuid = Uuid();
-                  String id = uuid.v4();
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.black,
+              ),
+              child: TextButton(
+                child: const Text(
+                  'บันทึก',
+                  style: TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),
+                ),
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    var uuid = Uuid();
+                    String id = uuid.v4();
 
-                  var statement = Transactions(
-                    id: id,
-                    title: titleController.text,
-                    amount: amountController.text,
-                    mix: mixController.text,
-                    lvSweet: selectedSweetness ?? 'ไม่ระบุ',
-                    lvTasty: selectedTastyLevel ?? 'ไม่ระบุ',
-                    suggest: suggestController.text, // ใช้ suggestController
-                    date: DateTime.now(),
-                  );
+                    var statement = Transactions(
+                      id: id,
+                      title: titleController.text,
+                      amount: amountController.text,
+                      mix: mixController.text,
+                      lvSweet: selectedSweetness ?? 'ไม่ระบุ',
+                      lvTasty: selectedTastyLevel ?? 'ไม่ระบุ',
+                      suggest: suggestController.text.isNotEmpty ? suggestController.text : '-',
+                      date: DateTime.now(),
+                    );
 
-                  var provider = Provider.of<TransactionProvider>(context, listen: false);
-                  provider.addTransaction(statement);
-                  Navigator.pop(context);
-                }
-              },
-            )
+                    var provider = Provider.of<TransactionProvider>(context, listen: false);
+                    provider.addTransaction(statement);
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),

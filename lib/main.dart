@@ -44,8 +44,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text(widget.title),
+        backgroundColor: Colors.yellow, 
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold, 
+            color: Colors.black, 
+          ),
+        ),
       ),
       body: Consumer<TransactionProvider>(
         builder: (context, provider, child) {
@@ -95,7 +101,11 @@ class _MyHomePageState extends State<MyHomePage> {
             return FormScreen();
           }));
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.black,
+        child: const Icon(
+          Icons.add,
+          color: Colors.yellow,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
