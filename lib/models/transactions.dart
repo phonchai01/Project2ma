@@ -1,5 +1,5 @@
 class Transactions {
-  final String id; // Add an id field to identify the transaction
+  final String id;
   final String title;
   final String amount;
   final String mix;
@@ -9,7 +9,7 @@ class Transactions {
   final DateTime date;
 
   Transactions({
-    required this.id, // Make id a required parameter
+    required this.id,
     required this.title,
     required this.amount,
     required this.mix,

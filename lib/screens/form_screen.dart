@@ -146,7 +146,7 @@ class FormScreen extends StatelessWidget {
                       mix: mixController.text,
                       lvSweet: selectedSweetness ?? 'ไม่ระบุ',
                       lvTasty: selectedTastyLevel ?? 'ไม่ระบุ',
-                      suggest: suggestController.text.isNotEmpty ? suggestController.text : '-',
+                      suggest: suggestController.text,
                       date: DateTime.now(),
                     );
 

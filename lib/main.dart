@@ -44,12 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.yellow, 
+        backgroundColor: Colors.yellow,
         title: Text(
           widget.title,
           style: const TextStyle(
-            fontWeight: FontWeight.bold, 
-            color: Colors.black, 
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
       ),
@@ -60,37 +60,71 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('ไม่มีรายการ'),
             );
           } else {
-            return ListView.builder(
-              itemCount: provider.transactions.length,
-              itemBuilder: (context, index) {
-                var statement = provider.transactions[index];
-                return Card(
-                  elevation: 5,
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                  child: ListTile(
-                    title: Text(
-                      statement.title,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            return SingleChildScrollView(
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: provider.transactions.length,
+                itemBuilder: (context, index) {
+                  var statement = provider.transactions[index];
+                  return Card(
+                    elevation: 5,
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                    child: ListTile(
+                      title: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.yellow,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          statement.title,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('ส่วนผสม: ${statement.mix}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black)),
+                          Text('ความหวาน: ${statement.lvSweet}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black)),
+                          Text('จำนวนเงิน: ${statement.amount} บาท', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black)),
+                          Text('ความอร่อย: ${statement.lvTasty}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black)),
+                          Text('ข้อเสนอแนะ: ${statement.suggest}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.black)),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('ยืนยันการลบ'),
+                                content: const Text('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?'),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('ยกเลิก'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('ยืนยัน'),
+                                    onPressed: () {
+                                      provider.deleteTransaction(index);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('ส่วนผสม: ${statement.mix}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
-                        Text('ความหวาน: ${statement.lvSweet}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
-                        Text('จำนวนเงิน: ${statement.amount} บาท', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
-                        Text('ความอร่อย: ${statement.lvTasty}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.brown)),
-                        Text('ข้อเสนอแนะ: ${statement.suggest}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.brown)),
-                      ],
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        provider.deleteTransaction(index);
-                      },
-                    ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             );
           }
         },
