@@ -1,12 +1,20 @@
-import 'package:simple_app/models/transactions.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_app/models/transactions.dart';
 import 'package:simple_app/provider/transaction_provider.dart';
 import 'package:uuid/uuid.dart';
 
-class FormScreen extends StatelessWidget {
-  FormScreen({super.key});
+class FormScreen extends StatefulWidget {
+  final Transactions? transaction;
 
+  FormScreen({super.key, this.transaction});
+
+  @override
+  _FormScreenState createState() => _FormScreenState();
+}
+
+class _FormScreenState extends State<FormScreen> {
   final formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final amountController = TextEditingController();
@@ -14,11 +22,44 @@ class FormScreen extends StatelessWidget {
   final suggestController = TextEditingController();
   String? selectedSweetness;
   String? selectedTastyLevel;
+  Color appBarColor = Colors.blue;
+
+  @override
+  void initState() {
+    super.initState();
+    titleController.text = widget.transaction?.title ?? '';
+    amountController.text = widget.transaction?.amount ?? '';
+    mixController.text = widget.transaction?.mix ?? '';
+    suggestController.text = widget.transaction?.suggest ?? '';
+    selectedSweetness = widget.transaction?.lvSweet;
+    selectedTastyLevel = widget.transaction?.lvTasty;
+
+    titleController.addListener(() => _changeAppBarColor());
+    amountController.addListener(() => _changeAppBarColor());
+    mixController.addListener(() => _changeAppBarColor());
+    suggestController.addListener(() => _changeAppBarColor());
+  }
+
+  void _changeAppBarColor() {
+    setState(() {
+      appBarColor = Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0); // สุ่มสี
+    });
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    amountController.dispose();
+    mixController.dispose();
+    suggestController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: appBarColor,
         title: const Text('แบบฟอร์มข้อมูล'),
       ),
       body: Form(
@@ -65,7 +106,9 @@ class FormScreen extends StatelessWidget {
                 DropdownMenuItem(value: 'หวานมาก', child: Text('หวานมาก', style: TextStyle(color: Colors.black))),
               ],
               onChanged: (value) {
-                selectedSweetness = value;
+                setState(() {
+                  selectedSweetness = value;
+                });
               },
               validator: (value) {
                 if (value == null) {
@@ -85,10 +128,6 @@ class FormScreen extends StatelessWidget {
                 if (input == null || input.isEmpty) {
                   return 'กรุณากรอกข้อมูล';
                 }
-                final amount = int.tryParse(input);
-                if (amount == null || amount <= 0) {
-                  return 'กรุณากรอกข้อมูลมากกว่า 0';
-                }
                 return null;
               },
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -99,14 +138,16 @@ class FormScreen extends StatelessWidget {
               ),
               value: selectedTastyLevel,
               items: const [
-                DropdownMenuItem(value: 'แย่มาก', child: Text('แย่มาก', style: TextStyle(color: Colors.black))),
                 DropdownMenuItem(value: 'ไม่อร่อย', child: Text('ไม่อร่อย', style: TextStyle(color: Colors.black))),
-                DropdownMenuItem(value: 'ปานกลาง', child: Text('ปานกลาง', style: TextStyle(color: Colors.black))),
-                DropdownMenuItem(value: 'อร่อย', child: Text('อร่อย', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'อร่อยน้อย', child: Text('อร่อยน้อย', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'อร่อยปกติ', child: Text('อร่อยปกติ', style: TextStyle(color: Colors.black))),
+                DropdownMenuItem(value: 'อร่อยปานกลาง', child: Text('อร่อยปานกลาง', style: TextStyle(color: Colors.black))),
                 DropdownMenuItem(value: 'อร่อยมาก', child: Text('อร่อยมาก', style: TextStyle(color: Colors.black))),
               ],
               onChanged: (value) {
-                selectedTastyLevel = value;
+                setState(() {
+                  selectedTastyLevel = value;
+                });
               },
               validator: (value) {
                 if (value == null) {
@@ -123,7 +164,6 @@ class FormScreen extends StatelessWidget {
               controller: suggestController,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
@@ -137,7 +177,7 @@ class FormScreen extends StatelessWidget {
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     var uuid = Uuid();
-                    String id = uuid.v4();
+                    String id = widget.transaction?.id ?? uuid.v4();
 
                     var statement = Transactions(
                       id: id,
@@ -151,7 +191,11 @@ class FormScreen extends StatelessWidget {
                     );
 
                     var provider = Provider.of<TransactionProvider>(context, listen: false);
-                    provider.addTransaction(statement);
+                    if (widget.transaction == null) {
+                      provider.addTransaction(statement);
+                    } else {
+                      provider.updateTransaction(statement);
+                    }
                     Navigator.pop(context);
                   }
                 },

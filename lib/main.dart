@@ -92,34 +92,47 @@ class _MyHomePageState extends State<MyHomePage> {
                           Text('ข้อเสนอแนะ: ${statement.suggest}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.black)),
                         ],
                       ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('ยืนยันการลบ'),
-                                content: const Text('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?'),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('ยกเลิก'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('ยืนยัน'),
-                                    onPressed: () {
-                                      provider.deleteTransaction(index);
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit), // ไอคอนแก้ไข
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return FormScreen(transaction: statement); // ส่งข้อมูลที่เลือกไปแก้ไข
+                              }));
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('ยืนยันการลบ'),
+                                    content: const Text('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('ยกเลิก'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('ยืนยัน'),
+                                        onPressed: () {
+                                          provider.deleteTransaction(index);
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -132,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return FormScreen();
+            return FormScreen(); // เริ่มหน้าแบบฟอร์มใหม่สำหรับเพิ่มข้อมูล
           }));
         },
         backgroundColor: Colors.black,
